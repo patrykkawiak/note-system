@@ -101,16 +101,7 @@ const addNewNote = () => {
 
 
     if (title.value !== '' && noteDate.value !== '' && priority.value !== '') {
-        let second
-        let minute
-        let hours
-        let day
-        let d
-        let textDay
-        let textHours
-        let currentDate
-        let newDate
-        let gap
+
 
 
 
@@ -118,7 +109,7 @@ const addNewNote = () => {
         shadow.classList.remove('active');
         let newNote = document.createElement('section');
         newNote.classList.add('note');
-
+        newNote.setAttribute("id", id);
         newNote.innerHTML = `
                         <h2 class="note-title">${title.value}</h2>
                         <p>Note text:</p>
@@ -143,6 +134,10 @@ const addNewNote = () => {
         
                         <div class="note-info">
                        
+                        <div class="info-box-3 box">
+                        <p>Placeholder:</p>
+                        <p class="value">Just do it!</p>
+                        </div>
                         <div class="info-box-4 box">
                             <p>Status:</p>
                             <p class="status value">In progress</p>
@@ -169,18 +164,20 @@ const addNewNote = () => {
 
 
 
-        // class note {
-        //     constructor(title, noteDate, text, priority) {
-        //         this.title = title
-        //         this.noteDate = noteDate
-        //         this.text = text;
-        //         this.priority = priority;
-        //     }
-        // }
+        class note {
+            constructor(title, noteDate, text, priority) {
+                this.title = title
+                this.noteDate = noteDate
+                this.text = text;
+                this.priority = priority;
+            }
+        }
 
-        // const noteId = new note(title.value, noteDate.value, text.value, priority.value)
+        const noteId = new note(title.value, noteDate.value, text.value, priority.value)
 
-        // localStorage.setItem(text.value, JSON.stringify(noteId));
+        localStorage.setItem(id++, JSON.stringify(noteId));
+
+
 
 
 
@@ -212,6 +209,7 @@ const confirmDelete = () => {
     window.localStorage.removeItem(parseInt(noti.id));
 
 
+
 }
 
 const declineDelete = () => {
@@ -234,8 +232,7 @@ const editNote = (note) => {
     newTitle.value = title.textContent;
     newNoteDate.value = noteDate.textContent;
     newText.value = text.textContent;
-    newPriority.value = 'Casual';
-
+    newPriority.value = priority.textContent;
 
 
 
@@ -253,7 +250,6 @@ const applyEdit = () => {
     let text = secondHelpNote.querySelector('.text');
     let noteDate = secondHelpNote.querySelector('.span-date');
     let priority = secondHelpNote.querySelector('.priority');
-    let noteTime = secondHelpNote.querySelector('.note-time');
 
 
     title.textContent = newTitle.value;
@@ -265,6 +261,21 @@ const applyEdit = () => {
     shadow.classList.remove('active');
     createBox.classList.remove('deactive');
     editBox.classList.add('deactive');
+    let noti = secondHelpNote;
+
+    class note {
+        constructor(title, noteDate, text, priority) {
+            this.title = title
+            this.noteDate = noteDate
+            this.text = text;
+            this.priority = priority;
+        }
+    }
+
+    const noteId = new note(newTitle.value, newNoteDate.value, newText.value, newPriority.value)
+
+    localStorage.setItem(parseInt(noti.id), JSON.stringify(noteId));
+
 }
 
 
@@ -323,64 +334,80 @@ const checkTime = () => {
 }
 
 
-// const createAllNotes = () => {
 
-//     for (let a = 0; a < localStorage.length; a++) {
-//         let item = JSON.parse(localStorage.[a]);        
-//         let title = item.title;
-//         let noteDate = item.noteDate;
-//         let priority = item.priority;
-//         let text = item.text;
+const createAllNotes = () => {
+
+    for (let a = 0; a < 1000; a++) {
 
 
 
+        let item = JSON.parse(localStorage.getItem(a));
+
+        if (item != undefined) {
+
+            let title = item.title;
+            let noteDate = item.noteDate;
+            let priority = item.priority;
+            let text = item.text;
+            let newNote = document.createElement('section');
+            newNote.setAttribute("id", a);
+            newNote.classList.add('note');
+            newNote.innerHTML = `
+                                <h2 class="note-title">${title}</h2>
+                                <p>Note text:</p>
+                                <p class="text">${text}</p>
+                               <div class="note-info">
+                                <div class="info-box-1 box">
+                                    <p>Dead-Line:</p>
+                                    <p class="note-date value">
+                                        <i class="fa-regular fa-calendar"></i> 
+                                        <span class="span-date">${noteDate}</span>
+                                    </p>
+        
+                                </div>
+        
+                                <div class="info-box-2 box">
+        
+                                    <p>Priority:</p>
+                                    <p class="priority value">${priority}</p>
+                                   </div>
+        
+                                </div>
+        
+                                <div class="note-info">
+                                <div class="info-box-3 box">
+                                <p>Placeholder:</p>
+                                    <p class="value">Just do it!</p>
+                                </div>
+                                <div class="info-box-4 box">
+                                    <p>Status:</p>
+                                    <p class="status value">In progress</p>
+                                </div>
+                            </div>
+        
+                                <div class="note-buttons">
+                                    <button class="accept"><i class="fa-sharp fa-solid fa-circle-check"></i></button>
+                                    <button class="edit"><i class="fa-solid fa-pen-to-square"></i></button>
+                                    <button class="delete"><i class="fa-sharp fa-solid fa-circle-xmark"></i></button>
+                                </div>
+                    `;
+            wrap.append(newNote);
+
+            functionalButtons();
+        }
+
+    }
 
 
-//         let newNote = document.createElement('section');
-//         newNote.classList.add('note');
-//         newNote.innerHTML = `
-//                         <h2 class="note-title">${title}</h2>
-//                         <p>Note text:</p>
-//                         <p class="text">${text}</p>
-//                        <div class="note-info">
-//                         <div class="info-box-1 box">
-//                             <p>Dead-Line:</p>
-//                             <p class="note-date value">
-//                                 <i class="fa-regular fa-calendar"></i> 
-//                                 <span class="span-date">${noteDate}</span>
-//                             </p>
 
-//                         </div>
 
-//                         <div class="info-box-2 box">
 
-//                             <p>Priority:</p>
-//                             <p class="priority value">${priority}</p>
-//                            </div>
 
-//                         </div>
+}
 
-//                         <div class="note-info">
-//                         <div class="info-box-4 box">
-//                             <p>Status:</p>
-//                             <p class="status value">In progress</p>
-//                         </div>
-//                     </div>
-
-//                         <div class="note-buttons">
-//                             <button class="accept"><i class="fa-sharp fa-solid fa-circle-check"></i></button>
-//                             <button class="edit"><i class="fa-solid fa-pen-to-square"></i></button>
-//                             <button class="delete"><i class="fa-sharp fa-solid fa-circle-xmark"></i></button>
-//                         </div>
-//             `;
-//         wrap.append(newNote);
-
-//         functionalButtons();
-//     }
-// }
 
 
 window.addEventListener('DOMContentLoaded', () => {
     main();
-    // createAllNotes();
+    createAllNotes();
 })
